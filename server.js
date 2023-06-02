@@ -38,6 +38,11 @@ app.use(function (req, res) {
     res.status(404).sendFile(__dirname + "/views/404.html");
 });
 
-app.listen(HTTP_PORT, () => {
-    console.log("Express http server listening on port " + HTTP_PORT);
-});
+blogService.initialize().then(() => {
+    app.listen(HTTP_PORT, () => {
+      console.log("Express http server listening on port " + HTTP_PORT);
+    });
+  }).catch((error) => {
+    console.error("Error initializing data:", error);
+  });
+  
