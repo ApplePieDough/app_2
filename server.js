@@ -20,17 +20,29 @@ app.get("/about", (req, res) => {
 
 // Route '/blog'
 app.get("/blog", (req, res) => {
-    res.send("TODO: get all posts who have published == true");
+    blogService.getPublishedPosts().then((data) => {
+        res.send(data);
+    }).catch((error) => {
+        res.send({ message: error });
+    });
 });
 
 // Route '/posts'
 app.get("/posts", (req,res) => {
-    res.send("TODO: get all posts from posts.json file");
+    blogService.getAllPosts().then((data) => {
+        res.send(data);
+    }).catch((error) => {
+        res.send({ message: error });
+    });
 });
 
 // Route '/categories'
 app.get("/categories", (req,res) => {
-    res.send("TODO: get all categories from categories.json file");
+    blogService.getCategories().then((data) => {
+        res.send(data);
+    }).catch((error) => {
+        res.send({ message: error });
+    });
 });
 
 // Handle 404 
