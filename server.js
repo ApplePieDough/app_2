@@ -20,8 +20,22 @@ app.get("/about", (req, res) => {
 
 // Route '/blog'
 app.get("/blog", (req, res) => {
-    var publishedPosts = blogService.getPublishedPosts();
-    res.json(publishedPosts);
+    res.send("TODO: get all posts who have published == true");
+});
+
+// Route '/posts'
+app.get("/posts", (req,res) => {
+    res.send("TODO: get all posts from posts.json file");
+});
+
+// Route '/categories'
+app.get("/categories", (req,res) => {
+    res.send("TODO: get all categories from categories.json file");
+});
+
+// Handle 404 
+app.use(function (req, res) {
+    res.status(404).sendFile(__dirname + "/views/404.html");
 });
 
 app.listen(HTTP_PORT, () => {
