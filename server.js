@@ -13,9 +13,15 @@ app.get("/", (req, res) => {
     res.redirect("/about");
 });
 
-// Route '/about' returns the about.html file from the 'views' folder
+// Route '/about' 
 app.get("/about", (req, res) => {
     res.sendFile(__dirname + "/views/about.html");
+});
+
+// Route '/blog'
+app.get("/blog", (req, res) => {
+    var publishedPosts = blogService.getPublishedPosts();
+    res.json(publishedPosts);
 });
 
 app.listen(HTTP_PORT, () => {
