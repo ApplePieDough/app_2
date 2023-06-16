@@ -89,21 +89,18 @@ app.get("/posts", (req, res) => {
     }
   });
 
-// route '/posts/value'
-app.get("/post/:id", (req, res) => {
+// route "posts/(id value)"
+app.get("/posts/:id", (req, res) => {
     const postId = parseInt(req.params.id);
-  
-    blogService
-      .getPostById(postId)
+    blogService.getPostById(postId)
       .then((post) => {
-        res.send(post);
+        res.send(JSON.stringify(post));
       })
       .catch((error) => {
         res.send({ message: error });
-      });
-  });
+    });
+});
   
-
 // Route '/categories'
 app.get("/categories", (req,res) => {
     blogService.getCategories().then((data) => {
