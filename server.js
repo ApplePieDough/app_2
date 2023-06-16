@@ -73,51 +73,40 @@ app.get("/categories", (req,res) => {
 });
 
 // Route '/posts/add'
-app.post("/posts/add", upload.single("image"), (req, res) => {
-    if (!req.file) {
-      res.send({ message: "No file uploaded" });
-      return;
-    }
-  
-    const streamUpload = (req) => {
-      return new Promise((resolve, reject) => {
+app.get("/posts/add", (req, res) => {
+    res.sendFile(__dirname + "/views/addPost.html");
+    if(req.file){
+        let streamUpload = (req) => {
+        return new Promise((resolve, reject) => {
         let stream = cloudinary.uploader.upload_stream(
-          (error, result) => {
-            if (result) {
-              resolve(result);
-            } else {
-              reject(error);
-            }
-          }
+        (error, result) => {
+        if (result) {
+        resolve(result);
+        } else {
+        reject(error);
+        }
+        }
         );
         streamifier.createReadStream(req.file.buffer).pipe(stream);
-      });
-    };
-  
-    async function uploadAndAddPost(req) {
-      try {
-        const uploaded = await streamUpload(req);
-        const imageUrl = uploaded.url;
-        const postData = {
-          title: req.body.title,
-          content: req.body.content,
-          published: req.body.published === undefined ? false : true
-        };
-  
-        blogService.addPost(postData).then((newPost) => {
-          res.redirect("/posts");
-        }).catch((error) => {
-          res.send({ message: error });
         });
-      } catch (error) {
-        res.send({ message: error });
-      }
-    }
-  
-    uploadAndAddPost(req);
-    res.redirect("/posts");
-  });
-  
+        };
+        async function upload(req) {
+        let result = await streamUpload(req);
+        console.log(result);
+        return result;
+        }
+        upload(req).then((uploaded)=>{
+        processPost(uploaded.url);
+        });
+        }else{
+        processPost("");
+        }
+        function processPost(imageUrl){
+        req.body.featureImage = imageUrl;
+        // TODO: Process the req.body and add it as a new Blog Post before redirecting to /posts
+        }
+});
+
 // Handle 404 
 app.use(function (req, res) {
     res.status(404).sendFile(__dirname + "/views/404.html");
