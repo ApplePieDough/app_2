@@ -78,11 +78,53 @@ function addPost(postData) {
   });
 }
 
+// retrieve posts by category
+function getPostsByCategory(category) {
+  return new Promise((resolve, reject) => {
+    const filteredPosts = posts.filter(post => post.category === category);
+
+    if (filteredPosts.length > 0) {
+      resolve(filteredPosts);
+    } else {
+      reject('No results returned');
+    }
+  });
+}
+
+// retrieve posts by minimum date
+function getPostsByMinDate(minDateStr) {
+  return new Promise((resolve, reject) => {
+    const filteredPosts = posts.filter(post => new Date(post.postDate) >= new Date(minDateStr));
+
+    if (filteredPosts.length > 0) {
+      resolve(filteredPosts);
+    } else {
+      reject('No results returned');
+    }
+  });
+}
+
+// retrieve post by id
+function getPostById(id) {
+  return new Promise((resolve, reject) => {
+    const foundPost = posts.find(post => post.id === id);
+
+    if (foundPost) {
+      resolve(foundPost);
+    } else {
+      reject('No result returned');
+    }
+  });
+}
+
 // expost funcitons
 module.exports = {
   initialize,
   getAllPosts,
   getPublishedPosts,
   getCategories,
-  addPost
+  addPost,
+  getPostsByCategory,
+  getPostsByMinDate,
+  getPostById
 };

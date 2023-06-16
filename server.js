@@ -55,13 +55,54 @@ app.get("/blog", (req, res) => {
 });
 
 // Route '/posts'
-app.get("/posts", (req,res) => {
-    blogService.getAllPosts().then((data) => {
-        res.send(data);
-    }).catch((error) => {
+app.get("/posts", (req, res) => {
+    const category = req.query.category;
+    const minDate = req.query.minDate;
+  
+    if (category) {
+      blogService
+        .getPostsByCategory(category)
+        .then((data) => {
+          res.send(data);
+        })
+        .catch((error) => {
+          res.send({ message: error });
+        });
+    } else if (minDate) {
+      blogService
+        .getPostsByMinDate(minDate)
+        .then((data) => {
+          res.send(data);
+        })
+        .catch((error) => {
+          res.send({ message: error });
+        });
+    } else {
+      blogService
+        .getAllPosts()
+        .then((data) => {
+          res.send(data);
+        })
+        .catch((error) => {
+          res.send({ message: error });
+        });
+    }
+  });
+
+// route '/posts/value'
+app.get("/post/:id", (req, res) => {
+    const postId = parseInt(req.params.id);
+  
+    blogService
+      .getPostById(postId)
+      .then((post) => {
+        res.send(post);
+      })
+      .catch((error) => {
         res.send({ message: error });
-    });
-});
+      });
+  });
+  
 
 // Route '/categories'
 app.get("/categories", (req,res) => {
