@@ -58,6 +58,11 @@ app.get("/categories", (req,res) => {
     });
 });
 
+// Route '/posts/add'
+app.get("/posts/add", (req, res) => {
+    res.sendFile(__dirname + "/views/addPost.html");
+});
+
 // Handle 404 
 app.use(function (req, res) {
     res.status(404).sendFile(__dirname + "/views/404.html");
