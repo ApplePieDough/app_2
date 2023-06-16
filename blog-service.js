@@ -62,11 +62,27 @@ function getCategories() {
   });
 }
 
+// add new post 
+function addPost(postData) {
+  return new Promise((resolve, reject) => {
+    const newPost = {
+      id: posts.length + 1,
+      title: postData.title,
+      content: postData.content,
+      published: postData.published === undefined ? false : true,
+    };
+
+    posts.push(newPost);
+
+    resolve(newPost);
+  });
+}
 
 // expost funcitons
 module.exports = {
   initialize,
   getAllPosts,
   getPublishedPosts,
-  getCategories
+  getCategories,
+  addPost
 };

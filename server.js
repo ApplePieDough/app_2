@@ -82,15 +82,13 @@ app.post("/posts/add", upload.single("featureImage"), (req, res) => {
     if (req.file) {
       const streamUpload = (req) => {
         return new Promise((resolve, reject) => {
-          let stream = cloudinary.uploader.upload_stream(
-            (error, result) => {
-              if (result) {
-                resolve(result);
-              } else {
-                reject(error);
-              }
+          let stream = cloudinary.uploader.upload_stream((error, result) => {
+            if (result) {
+              resolve(result);
+            } else {
+              reject(error);
             }
-          );
+          });
           streamifier.createReadStream(req.file.buffer).pipe(stream);
         });
       };
@@ -102,14 +100,17 @@ app.post("/posts/add", upload.single("featureImage"), (req, res) => {
           const postData = {
             title: req.body.title,
             content: req.body.content,
-            published: req.body.published === undefined ? false : true
+            published: req.body.published === undefined ? false : true,
           };
   
-          blogService.addPost(postData).then((newPost) => {
-            res.redirect("/posts");
-          }).catch((error) => {
-            res.send({ message: error });
-          });
+          blogService
+            .addPost(postData)
+            .then((newPost) => {
+              res.redirect("/posts");
+            })
+            .catch((error) => {
+              res.send({ message: error });
+            });
         } catch (error) {
           res.send({ message: error });
         }
@@ -120,7 +121,7 @@ app.post("/posts/add", upload.single("featureImage"), (req, res) => {
       processPost("");
     }
   });
-
+  
 // Handle 404 
 app.use(function (req, res) {
     res.status(404).sendFile(__dirname + "/views/404.html");
