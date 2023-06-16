@@ -88,18 +88,6 @@ app.get("/posts", (req, res) => {
         });
     }
   });
-
-// route "posts/(id value)"
-app.get("/posts/:id", (req, res) => {
-    const postId = parseInt(req.params.id);
-    blogService.getPostById(postId)
-      .then((post) => {
-        res.send(JSON.stringify(post));
-      })
-      .catch((error) => {
-        res.send({ message: error });
-    });
-});
   
 // Route '/categories'
 app.get("/categories", (req,res) => {
@@ -159,7 +147,20 @@ app.post("/posts/add", upload.single("featureImage"), (req, res) => {
       processPost("");
     }
   });
-  
+
+  // route "posts/(id value)"
+app.get("/posts/:id", (req, res) => {
+    const postId = parseInt(req.params.id);
+    blogService.getPostById(postId)
+      .then((post) => {
+        res.send(JSON.stringify(post));
+      })
+      .catch((error) => {
+        res.send({ message: error });
+    });
+});
+
+
 // Handle 404 
 app.use(function (req, res) {
     res.status(404).sendFile(__dirname + "/views/404.html");

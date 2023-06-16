@@ -81,7 +81,7 @@ function addPost(postData) {
 // retrieve posts by category
 function getPostsByCategory(category) {
   return new Promise((resolve, reject) => {
-    const filteredPosts = posts.filter(post => post.category == category);
+    const filteredPosts = posts.filter(post => post.category === category);
 
     if (filteredPosts.length > 0) {
       resolve(filteredPosts);
