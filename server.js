@@ -1,10 +1,10 @@
 /*********************************************************************************************
- * WEB322 - Assignment 02
+ * WEB322 - Assignment 03
  * I declare that this assignemnt is my own work in accordance with Seneca Academic Policy. No part
  * of this assignement has been copied manually or electronically from any other source
  * (including 3rd party web sites) or distributed to other students.
  * 
- * Name: Yaju Patel | Studnet ID: 175082213 | Date: June 2, 2023
+ * Name: Yaju Patel | Studnet ID: 175082213 | Date: June 16, 2023
  * 
  * cyclic Web App URL: https://beautiful-fox-earmuffs.cyclic.app/
  * 
