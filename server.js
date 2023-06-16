@@ -11,8 +11,22 @@
  * GitHub Repository URL: https://github.com/ApplePieDough/web322-app
  *********************************************************************************************/
 
-//require blog-service.js
+// require blog-service.js
 var blogService = require("./blog-service");
+var multer = require("multer"); // Require multer
+var cloudinary = require("cloudinary").v2; // Require cloudinary
+var streamifier = require("streamifier"); // Require streamifier
+
+//configuring cloudinary credentials 
+cloudinary.config({
+    cloud_name: 'drz2a146g',
+    api_key: '961926373394416',
+    api_secret: 'mgjjoQ7lzxWtW3WHSRUk-AmFn3o',
+    secure: true
+});
+
+//denying disk storage
+const upload = multer();
 
 var HTTP_PORT = process.env.PORT || 8080;
 var express = require("express");
@@ -59,10 +73,51 @@ app.get("/categories", (req,res) => {
 });
 
 // Route '/posts/add'
-app.get("/posts/add", (req, res) => {
-    res.sendFile(__dirname + "/views/addPost.html");
-});
-
+app.post("/posts/add", upload.single("image"), (req, res) => {
+    if (!req.file) {
+      res.send({ message: "No file uploaded" });
+      return;
+    }
+  
+    const streamUpload = (req) => {
+      return new Promise((resolve, reject) => {
+        let stream = cloudinary.uploader.upload_stream(
+          (error, result) => {
+            if (result) {
+              resolve(result);
+            } else {
+              reject(error);
+            }
+          }
+        );
+        streamifier.createReadStream(req.file.buffer).pipe(stream);
+      });
+    };
+  
+    async function uploadAndAddPost(req) {
+      try {
+        const uploaded = await streamUpload(req);
+        const imageUrl = uploaded.url;
+        const postData = {
+          title: req.body.title,
+          content: req.body.content,
+          published: req.body.published === undefined ? false : true
+        };
+  
+        blogService.addPost(postData).then((newPost) => {
+          res.redirect("/posts");
+        }).catch((error) => {
+          res.send({ message: error });
+        });
+      } catch (error) {
+        res.send({ message: error });
+      }
+    }
+  
+    uploadAndAddPost(req);
+    res.redirect("/posts");
+  });
+  
 // Handle 404 
 app.use(function (req, res) {
     res.status(404).sendFile(__dirname + "/views/404.html");
