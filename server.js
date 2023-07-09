@@ -12,12 +12,14 @@
  *********************************************************************************************/
 
 
-
 // require blog-service.js
 var blogService = require("./blog-service");
 var multer = require("multer"); // Require multer
 var cloudinary = require("cloudinary").v2; // Require cloudinary
 var streamifier = require("streamifier"); // Require streamifier
+
+// handlebars
+var exphbs = require('express-handlebars');// Require handlebars
 
 //configuring cloudinary credentials 
 cloudinary.config({
@@ -26,9 +28,6 @@ cloudinary.config({
     api_secret: 'mgjjoQ7lzxWtW3WHSRUk-AmFn3o',
     secure: true
 });
-
-//require express handlebars
-var exphbs = require('express-handlebars');
 
 //denying disk storage
 const upload = multer();
@@ -40,10 +39,10 @@ var app = express();
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
-//handle html files
-app.engine('.hbs', exphbs({ extname: '.hbs' }));
+// Handlebars configuration
+app.engine('.hbs', exphbs.engine({ extname: '.hbs', defaultLayout: 'main' }));
 app.set('view engine', '.hbs');
-app.engine('.hbs', exphbs({ extname: '.hbs', defaultLayout: 'main' }));
+
 
 // Route '/' redirects to '/about'
 app.get("/", (req, res) => {
