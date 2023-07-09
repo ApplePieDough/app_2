@@ -11,6 +11,8 @@
  * GitHub Repository URL: https://github.com/ApplePieDough/web322-app
  *********************************************************************************************/
 
+
+
 // require blog-service.js
 var blogService = require("./blog-service");
 var multer = require("multer"); // Require multer
@@ -25,6 +27,9 @@ cloudinary.config({
     secure: true
 });
 
+//require express handlebars
+var exphbs = require('express-handlebars');
+
 //denying disk storage
 const upload = multer();
 
@@ -35,6 +40,11 @@ var app = express();
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
+//handle html files
+app.engine('.hbs', exphbs({ extname: '.hbs' }));
+app.set('view engine', '.hbs');
+app.engine('.hbs', exphbs({ extname: '.hbs', defaultLayout: 'main' }));
+
 // Route '/' redirects to '/about'
 app.get("/", (req, res) => {
     res.redirect("/about");
@@ -42,8 +52,9 @@ app.get("/", (req, res) => {
 
 // Route '/about' 
 app.get("/about", (req, res) => {
-    res.sendFile(__dirname + "/views/about.html");
+  res.render("about");
 });
+
 
 // Route '/blog'
 app.get("/blog", (req, res) => {
