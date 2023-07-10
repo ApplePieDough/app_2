@@ -117,6 +117,19 @@ function getPostById(id) {
   });
 }
 
+//retrieve published posts by category 
+function getPublishedPostsByCategory(category) {
+  return new Promise((resolve, reject) => {
+    const filteredPosts = posts.filter(post => post.published && post.category === category);
+    if (filteredPosts.length > 0) {
+      resolve(filteredPosts);
+    } else {
+      reject('No published posts available in the given category');
+    }
+  });
+}
+
+
 // expost funcitons
 module.exports = {
   initialize,
@@ -126,5 +139,6 @@ module.exports = {
   addPost,
   getPostsByCategory,
   getPostsByMinDate,
-  getPostById
+  getPostById,
+  getPublishedPostsByCategory
 };
